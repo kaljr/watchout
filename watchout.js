@@ -1,6 +1,6 @@
 // start slingin' some d3 here.
-var width = window.innerWidth - 50;
-var height = window.innerHeight - 50;
+var width = window.innerWidth;
+var height = window.innerHeight;
 var enemiesN = 30;
 var userR = 15;
 var enemyR = 15;
@@ -13,6 +13,11 @@ var score = {
   collisions: 0
 }
 
+var minus5 = d3.select('.minus5');
+  minus5.on('click', function() {
+
+});
+
 var HighScore = d3.select('.high span');
 var CurrentScore = d3.select('.current span');
 var Collisions = d3.select('.collisions span');
@@ -21,7 +26,6 @@ var Collisions = d3.select('.collisions span');
 var drag = d3.behavior.drag().on('drag', function() {
   var x = +user.attr('cx')+d3.event.dx;
   var y = +user.attr('cy')+d3.event.dy;
-  console.log(x);
   if( 100 < x  && x < 150) {
     user.attr('cx', x).attr('cy', y);
   } else {
@@ -44,7 +48,7 @@ var user = gameBoard.append('circle')
                     .attr('cx', width/2)
                     .attr('cy', height/2)
                     .attr('r', userR)
-                    .style('fill', 'red')
+                    .style('fill', '#BC8200')
                     .call(drag);
 
 // SVG group of all our enemies
@@ -57,7 +61,7 @@ var createEnemies = function(n){
            .attr('cx', Math.random()*width)
            .attr('cy', Math.random()*height)
            .attr('r', enemyR)
-           .style('fill', 'black');
+           .style('fill', '#2C5DBC');
   }
 }(enemiesN);
 
@@ -90,16 +94,21 @@ var distance = function(d){
 
 var updateEnemyPos = function(){
   var arr = reposition(enemiesN);
+  var enemiesNow = enemies.selectAll('circle');
+  // debugger;
 
-  enemies.selectAll('circle')
-         .data(arr);
+  enemiesNow.data(arr);
 
-  enemies.selectAll('circle')
-         .transition()
-         .duration(3000)
-         .tween('custom', distance)
-         .attr('cx', function(d) { return d[0] })
-         .attr('cy', function(d) { return d[1] });
+  enemiesNow.transition()
+            .duration(3000)
+            .tween('custom', distance)
+            .attr('cx', function(d) { return d[0] })
+            .attr('cy', function(d) { return d[1] })
+            .attr('r', enemyR)
+            .style('fill', '#2C5DBC');
+
+  // enemiesNow.enter().append('circle');
+  // enemiesNow.remove();
 }
 
 setInterval(updateEnemyPos, 2500);
