@@ -1,6 +1,6 @@
 // start slingin' some d3 here.
-var width = window.innerWidth;
-var height = window.innerHeight;
+var width = window.innerWidth - 50;
+var height = window.innerHeight - 50;
 var enemiesN = 30;
 var userR = 15;
 var enemyR = 15;
@@ -19,15 +19,26 @@ var Collisions = d3.select('.collisions span');
 
 // Set up listener for user
 var drag = d3.behavior.drag().on('drag', function() {
-  user.attr('cx', +user.attr('cx')+d3.event.dx)
-      .attr('cy', +user.attr('cy')+d3.event.dy);
+  var x = +user.attr('cx')+d3.event.dx;
+  var y = +user.attr('cy')+d3.event.dy;
+  console.log(x);
+  if( 100 < x  && x < 150) {
+    user.attr('cx', x).attr('cy', y);
+  } else {
+    if(x>userR && x<width-userR) {
+      user.attr('cx', x);
+    }
+    if(y>userR && y<height-userR) {
+      user.attr('cy', y);
+    }
+  }
 });
 
 // rendering of board
 var gameBoard = d3.select('body')
                   .append('svg')
-                  .attr('width', width)
-                  .attr('height', height);
+                  .style('width', width)
+                  .style('height', height);
 
 var user = gameBoard.append('circle')
                     .attr('cx', width/2)
