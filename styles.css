@@ -9,7 +9,7 @@ body{
   background-color: #0F3070;
   overflow: hidden;
   font-family: 'PT Sans', sans-serif;
-  font-size: 40px;
+  font-size: 20pt;
 }
 svg{
   position: absolute;
@@ -18,18 +18,54 @@ svg{
   z-index: -1;
 }
 .scoreboard{
-  position: fixed;
   top: 25px;
   left: 25px;
   background: #2C5DBC;
   color: white;
   padding: 15px;
-  border-radius: 3px;
+  border-radius: 7px 7px 0 0;
   width: 400px;
   box-shadow: 0px 0px 10px #06245E;
 }
 .scoreboard div{
   padding: 2px;
+}
+.enemies{
+  width: 430px;
+  text-align: center;
+  background: #1748A8;
+  border-radius: 0 0 7px 7px;
+  padding: 6px 0;
+}
+
+.enemies div {
+  display: inline-block;
+  font-size: 15pt;
+  width: 35%;
+  color: white;
+}
+.enemies button{
+  font-size: 20pt;
+  border-radius: 5px;
+  background: white;
+  width: 13%;
+  padding: 0px 10px;
+  margin:0 2px;
+  color: #2C5DBC;
+  border: none;
+  box-shadow: 0px 0px 4px #06245E;
+  transition-duration: 0.5s;
+
+}
+
+.enemies button:hover {
+  background: #0F3070;
+  color: white;
+  box-shadow: 0px 0px 8px #06245E;
+  transition-duration: 0.5s;
+}
+.enemies button:focus {
+  outline: none;
 }
 
 .button {

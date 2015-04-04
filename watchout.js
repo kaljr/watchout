@@ -1,9 +1,14 @@
 // start slingin' some d3 here.
 var width = window.innerWidth;
 var height = window.innerHeight;
-var enemiesN = 30;
+var nEnemies = 30;
 var userR = 15;
 var enemyR = 15;
+
+var nEnemiesText = d3.select('.enemies span');
+var HighScore = d3.select('.high span');
+var CurrentScore = d3.select('.current span');
+var Collisions = d3.select('.collisions span');
 
 
 // object holding scores of the game
@@ -13,14 +18,44 @@ var score = {
   collisions: 0
 }
 
+var increment = function(n){
+    nEnemies += n;
+    nEnemiesText.html(nEnemies);
+    var arr = reposition(nEnemies);
+
+    var circles = enemies.selectAll('circle')
+           .data(arr);
+
+    circles.enter()
+           .append('circle')
+           .attr('cx', Math.random()*width)
+           .attr('cy', Math.random()*height)
+           .attr('r', enemyR)
+           .style('fill', '#2C5DBC');
+
+    circles.exit().remove();
+}
+
 var minus5 = d3.select('.minus5');
-  minus5.on('click', function() {
+  minus5.on('click', function(){
+    increment(-5)
+  });
 
-});
+var minus1 = d3.select('.minus1');
+  minus1.on('click', function(){
+    increment(-1)
+  });
 
-var HighScore = d3.select('.high span');
-var CurrentScore = d3.select('.current span');
-var Collisions = d3.select('.collisions span');
+var plus1 = d3.select('.plus1');
+  plus1.on('click', function(){
+    increment(1)
+  });
+
+var plus5 = d3.select('.plus5');
+  plus5.on('click', function(){
+    increment(5)
+  });
+
 
 // Set up listener for user
 var drag = d3.behavior.drag().on('drag', function() {
@@ -63,7 +98,7 @@ var createEnemies = function(n){
            .attr('r', enemyR)
            .style('fill', '#2C5DBC');
   }
-}(enemiesN);
+}(nEnemies);
 
 // repositioning of enemies
 var reposition = function(n){
@@ -79,25 +114,27 @@ var distance = function(d){
   var enemyX = [d3.select(this).attr('cx'), d[0]];
   var enemyY = [d3.select(this).attr('cy'), d[1]];
   var dist = userR + enemyR;
+  var collided = false;
 
   return function(t){
-    var currentX = +enemyX[0]+enemyX[1]*t;
-    var currentY = +enemyY[0]+enemyY[1]*t;
+    var currentX = +enemyX[0] + (enemyX[1]-enemyX[0])*t;
+    var currentY = +enemyY[0] + (enemyY[1]-enemyY[1])*t;
     var d = Math.sqrt(Math.pow(currentX - user.attr('cx'), 2) + Math.pow(currentY - user.attr('cy'), 2));
     if( d < dist){
+      if(!collided){
       score.current = 0;
       score.collisions++;
       Collisions.html(score.collisions);
+      collided = true;
+      }
     }
   }
 }
 
 var updateEnemyPos = function(){
-  var arr = reposition(enemiesN);
-  var enemiesNow = enemies.selectAll('circle');
-  // debugger;
-
-  enemiesNow.data(arr);
+  var arr = reposition(nEnemies);
+  var enemiesNow = enemies.selectAll('circle')
+                          .data(arr);
 
   enemiesNow.transition()
             .duration(3000)
